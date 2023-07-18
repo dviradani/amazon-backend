@@ -49,3 +49,5 @@ orderRouter.post(
         }
     })
 );
+
+export default orderRouter;
