@@ -70,7 +70,7 @@ productRouter.get(
         ? { createdAt: -1 }
         : { _id: -1 };
 
-        const products = await Product.find({...queryFilter,...categoryFilter,...ratingFilter,...priceFilter }).sort(sortOrder).skip((page - 1) * pageSize).limit(pageSize);
+        const products = await Product.find({...queryFilter,...categoryFilter,...ratingFilter,...priceFilter}).sort(sortOrder).skip((page - 1) * pageSize).limit(pageSize);
         const countProducts = products.length;
         res.send({products,page,countProducts,pages: Math.ceil(countProducts / pageSize)});
     })

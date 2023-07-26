@@ -14,6 +14,6 @@ export const generateToken = (user) => {
                 next();
             })
         }else{
-            return res.status(401).json({message : "No Token"});
+            return res.status(401).json({message : "No Token"})
         }
     }
