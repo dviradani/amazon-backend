@@ -54,10 +54,11 @@ productRouter.get(
         const order = query.order || "";
         const searchQuery = query.query || "";
 
+        console.log(price);
         const queryFilter = searchQuery && searchQuery !== "all" ? { title: { $regex: searchQuery, $options: 'i' } } : {};
-        const categoryFilter = category && category !== "all" ? { category: { $regex: category, $options: 'i' } } : {};
-        const ratingFilter = rating && rating !== "all" ? {} : { "rating.rate": { $gte: Number(rating) } };
-        const priceFilter = price && price !== "all" ? {} : { price: { $gte: Number(price.split("-")[0]), $lte: Number(price.split("-")[1]) } };
+        const categoryFilter = category && category !== "all" ? { category} : {};
+        const ratingFilter = rating && rating === "all" ? {} : { "rating.rate": { $gte: Number(rating) } };
+        const priceFilter = price && price === "all" ? {} : { price: { $gte: Number(price.split("-")[0]), $lte: Number(price.split("-")[1]) } };
         
         const sortOrder =
       order === "lowest"
@@ -71,7 +72,13 @@ productRouter.get(
         : { _id: -1 };
 
         const products = await Product.find({...queryFilter,...categoryFilter,...ratingFilter,...priceFilter}).sort(sortOrder).skip((page - 1) * pageSize).limit(pageSize);
-        const countProducts = products.length;
+        console.log(products);
+        const countProducts = await Product.countDocuments({
+            ...queryFilter,
+            ...categoryFilter,
+            ...ratingFilter,
+            ...priceFilter,
+          });
         res.send({products,page,countProducts,pages: Math.ceil(countProducts / pageSize)});
     })
 )
